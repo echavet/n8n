@@ -1,2 +1,2 @@
-#!/bin/sh
-exec n8n start
+#!/usr/bin/env bash
+exec /usr/bin/n8n start
