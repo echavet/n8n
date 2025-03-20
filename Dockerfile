@@ -1,8 +1,6 @@
 ARG BUILD_FROM
 FROM $BUILD_FROM
 
-ENV LANG C.UTF-8
-
 # Installation des dépendances
 #RUN apk add --no-cache \
 #    nodejs \
@@ -16,5 +14,9 @@ EXPOSE 5678
 WORKDIR /data
 ENV N8N_CONFIG_DIR=/data
 
-CMD ["tail", "-f", "/dev/null"]
+COPY run.sh /
+RUN chmod a+x /run.sh
+
+CMD [ "/run.sh" ]
+#CMD ["tail", "-f", "/dev/null"]
 #CMD ["/bin/sh", "-c", "while true; do sleep 3600; done"]
