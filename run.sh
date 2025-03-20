@@ -1,3 +1,4 @@
 #!/usr/bin/with-contenv bashio
-tail -f /dev/null
-#exec /usr/bin/n8n start
+# tail -f /dev/null
+# exec /usr/bin/n8n start
+npx n8n
