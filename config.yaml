@@ -1,5 +1,5 @@
 name: "n8n"
-version: "1.0.2"
+version: "1.0.3"
 slug: "n8n"
 description: "Lance une instance de n8n pour l'automatisation des workflows"
 arch:
