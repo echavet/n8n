@@ -2,10 +2,9 @@ ARG BUILD_FROM
 FROM $BUILD_FROM
 
 # Installation des dépendances
-#RUN apk add --no-cache \
-#    nodejs \
-#    npm \
-#    && npm install -g n8n
+RUN apk add --no-cache \
+    nodejs \
+    npm
 
 # Exposition du port
 EXPOSE 5678
