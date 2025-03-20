@@ -12,14 +12,11 @@ RUN apk add --no-cache \
 # Exposition du port
 EXPOSE 5678
 
-# Répertoire de travail pour les données de n8n
+# Répertoire de travail
 WORKDIR /data
 ENV N8N_CONFIG_DIR=/data
 
-# Copier le script d'entrée
-COPY run.sh /run.sh
-RUN chmod +x /run.sh
-
-# Utiliser le script comme point d'entrée
-#CMD ["/run.sh"]
-CMD ["tail", "-f", "/dev/null"]
+# Créer le répertoire pour s6-overlay et copier le script run
+RUN mkdir -p /etc/services.d/n8n
+COPY run.sh /etc/services.d/n8n/run
+RUN chmod +x /etc/services.d/n8n/run
