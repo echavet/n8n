@@ -21,4 +21,5 @@ COPY run.sh /run.sh
 RUN chmod +x /run.sh
 
 # Utiliser le script comme point d'entrée
-CMD ["/run.sh"]
+#CMD ["/run.sh"]
+CMD ["tail", "-f", "/dev/null"]
