@@ -14,8 +14,11 @@ EXPOSE 5678
 
 # Répertoire de travail pour les données de n8n
 WORKDIR /data
-# Définit le chemin de stockage de n8n (équivalent à /home/node/.n8n)
 ENV N8N_CONFIG_DIR=/data
 
-# Commande pour démarrer n8n
-CMD ["n8n", "start"]
+# Copier le script d'entrée
+COPY run.sh /run.sh
+RUN chmod +x /run.sh
+
+# Utiliser le script comme point d'entrée
+CMD ["/run.sh"]
