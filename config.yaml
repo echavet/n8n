@@ -1,0 +1,23 @@
+name: "n8n"
+version: "1.0.0"
+slug: "n8n"
+description: "Lance une instance de n8n pour l'automatisation des workflows"
+arch:
+  - aarch64
+  - amd64
+  - armhf
+  - armv7
+  - i386
+url: "https://github.com/echavet/n8n"
+startup: "application"
+boot: "auto"
+ports:
+  5678/tcp: 5678
+ports_description:
+  5678/tcp: "Port pour accéder à l'interface web de n8n"
+options:
+  log_level: "info"
+schema:
+  log_level: "list(debug|info|warn|error)?"
+map:
+  - "config:rw"
