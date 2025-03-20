@@ -21,4 +21,5 @@ RUN mkdir -p /etc/services.d/n8n
 COPY run.sh /etc/services.d/n8n/run
 RUN chmod +x /etc/services.d/n8n/run
 
-CMD ["tail", "-f", "/dev/null"]
+#CMD ["tail", "-f", "/dev/null"]
+CMD ["/bin/sh", "-c", "while true; do sleep 3600; done"]
