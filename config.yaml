@@ -1,5 +1,5 @@
 name: "n8n"
-version: "1.3.0"
+version: "1.3.1"
 slug: "n8n"
 description: "Lance une instance de n8n pour l'automatisation des workflows"
 init: false

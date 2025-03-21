@@ -5,26 +5,19 @@
 # Fetches and exports n8n encryption key if not specified
 # ==============================================================================
 
-declare webhook_url
 declare encryption_key
 declare generated_key
 
-# S’assurer que le script est exécutable dans le conteneur
 chmod +x "$0"
 
 bashio::log.info "Fetching n8n encryption key..."
 
-webhook_url=$(bashio::config 'webhook_url')
 encryption_key=$(bashio::config 'encryption_key')
-
-bashio::log.info "webhook_url: ${webhook_url}"
 
 if bashio::config.has_value 'encryption_key'; then
   bashio::log.info "Clé de chiffrement valide trouvée dans les options: ${encryption_key}"
 else
   bashio::log.info "Aucune clé de chiffrement valide spécifiée, attente de génération par n8n..."
-  
-  # Attendre que /root/.n8n/config soit créé (timeout de 120 secondes)
   declare -i timeout=120
   declare -i count=0
   while [ ! -f /root/.n8n/config ] && [ "${count}" -lt "${timeout}" ]; do
@@ -32,7 +25,6 @@ else
     count=$((count + 1))
     bashio::log.debug "Attente de /root/.n8n/config... (${count}/${timeout} secondes)"
   done
-  
   if [ -f /root/.n8n/config ]; then
     generated_key=$(jq -r '.encryptionKey // empty' /root/.n8n/config)
     if bashio::var.has_value "${generated_key}"; then

@@ -6,29 +6,15 @@
 # ==============================================================================
 
 declare webhook_url
-declare encryption_key
 
-# S’assurer que le script est exécutable dans le conteneur
 chmod +x "$0"
 
 bashio::log.info "Starting n8n service..."
 
 webhook_url=$(bashio::config 'webhook_url')
-encryption_key=$(bashio::config 'encryption_key')
-
 bashio::log.info "webhook_url: ${webhook_url}"
 
-export N8N_HOST=0.0.0.0
-export N8N_PORT=5678
-export N8N_WEBHOOK_URL="${webhook_url}"
-export N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=true
-export N8N_RUNNERS_ENABLED=true
-
-if bashio::config.has_value 'encryption_key'; then
-  export N8N_ENCRYPTION_KEY="${encryption_key}"
-  bashio::log.info "Utilisation de la clé de chiffrement: ${encryption_key}"
-else
-  bashio::log.info "Aucune clé de chiffrement disponible, n8n va la générer."
-fi
+# Charger les variables d’environnement depuis /data/n8n_env
+source /data/n8n_env
 
 exec n8n start

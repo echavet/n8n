@@ -1,19 +1,39 @@
-mkdir -p rootfs/etc/s6-overlay/s6-rc.d/debug-shell/dependencies.d
-touch rootfs/etc/s6-overlay/s6-rc.d/debug-shell/dependencies.d/init-n8n-key
-echo "longrun" > rootfs/etc/s6-overlay/s6-rc.d/debug-shell/type
-echo "/etc/s6-overlay/s6-rc.d/debug-shell/run" > rootfs/etc/s6-overlay/s6-rc.d/debug-shell/up
+mkdir -p rootfs/etc/s6-overlay/s6-rc.d/init-n8n/dependencies.d
+touch rootfs/etc/s6-overlay/s6-rc.d/init-n8n/dependencies.d/base
+echo "oneshot" > rootfs/etc/s6-overlay/s6-rc.d/init-n8n/type
+echo "/etc/s6-overlay/s6-rc.d/init-n8n/run" > rootfs/etc/s6-overlay/s6-rc.d/init-n8n/up
 echo "#!/usr/bin/with-contenv bashio
 # shellcheck shell=bash
 # ==============================================================================
 # Home Assistant Community Add-on: n8n
-# Temporary debug shell to keep container alive
+# Initializes n8n configuration options
 # ==============================================================================
 
-bashio::log.info \"Debug shell started. Container will stay alive for interactive debugging.\"
-bashio::log.info \"Use 'docker exec -it <container> bash' to access the shell.\"
+declare webhook_url
+declare encryption_key
 
-# Garder le conteneur actif avec un shell
-exec /bin/bash -i" > rootfs/etc/s6-overlay/s6-rc.d/debug-shell/run
-chmod +x rootfs/etc/s6-overlay/s6-rc.d/debug-shell/run
+chmod +x \"\$0\"
 
-touch rootfs/etc/s6-overlay/s6-rc.d/user/contents.d/debug-shell
+bashio::log.info \"Initializing n8n configuration...\"
+
+webhook_url=\$(bashio::config 'webhook_url')
+encryption_key=\$(bashio::config 'encryption_key')
+
+bashio::log.info \"webhook_url: \${webhook_url}\"
+
+echo \"N8N_HOST=0.0.0.0\" > /data/n8n_env
+echo \"N8N_PORT=5678\" >> /data/n8n_env
+echo \"N8N_WEBHOOK_URL=\${webhook_url}\" >> /data/n8n_env
+echo \"N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=true\" >> /data/n8n_env
+echo \"N8N_RUNNERS_ENABLED=true\" >> /data/n8n_env
+
+if bashio::config.has_value 'encryption_key'; then
+  echo \"N8N_ENCRYPTION_KEY=\${encryption_key}\" >> /data/n8n_env
+  bashio::log.info \"Clé de chiffrement ajoutée: \${encryption_key}\"
+else
+  bashio::log.info \"Aucune clé de chiffrement spécifiée, n8n la générera.\"
+fi
+
+exit 0" > rootfs/etc/s6-overlay/s6-rc.d/init-n8n/run
+chmod +x rootfs/etc/s6-overlay/s6-rc.d/init-n8n/run
+touch rootfs/etc/s6-overlay/s6-rc.d/user/contents.d/init-n8n
