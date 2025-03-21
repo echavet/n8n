@@ -26,12 +26,12 @@ else
     bashio::log.debug "Attente de /root/.n8n/config... (${count}/${timeout} secondes)"
   done
   if [ -f /root/.n8n/config ]; then
-    generated_key=$(jq -r '.encryptionKey // empty' /root/.n8n/config)
+    generated_key=$(jq -r '.encryptionKey // empty' /root/.n8n/config || echo "")
     if bashio::var.has_value "${generated_key}"; then
-      bashio::config 'encryption_key' "${generated_key}"
+      bashio::config 'encryption_key' "${generated_key}" || bashio::log.warning "Échec de l'exportation de la clé"
       bashio::log.info "Clé générée par n8n et exportée dans la config de l'addon: ${generated_key}"
     else
-      bashio::log.warning "Fichier /root/.n8n/config trouvé, mais aucune clé présente."
+      bashio::log.warning "Fichier /root/.n8n/config trouvé, mais aucune clé présente ou jq a échoué."
     fi
   else
     bashio::log.warning "Timeout atteint (${timeout} secondes) ou échec: /root/.n8n/config non créé."
