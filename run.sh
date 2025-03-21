@@ -1,4 +1,5 @@
 #!/usr/bin/with-contenv bashio
+set -e        # exit on error
 
 bashio::log.info "N8N addon starting..."
 
