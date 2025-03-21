@@ -13,7 +13,7 @@ export N8N_PORT=5678
 export WEBHOOK_URL="$WEBHOOK_URL"
 export N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=true
 export N8N_CONFIG_DIR=/data  # On garde ça, mais n8n semble l'ignorer
-#export N8N_RUNNERS_ENABLED=true  # Ajout pour éviter la dépréciation
+export N8N_RUNNERS_ENABLED=false  # Ajout pour éviter la dépréciation
 
 # Si une encryption_key est spécifiée, l'utiliser
 if [ -n "$ENCRYPTION_KEY" ] && [ "$ENCRYPTION_KEY" != "null" ]; then
