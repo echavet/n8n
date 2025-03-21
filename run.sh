@@ -1,5 +1,6 @@
 #!/usr/bin/with-contenv bashio
 
+bashio::log.info "N8N addon starting..."
 
 WEBHOOK_URL=$(bashio::config 'webhook_url')
 ENCRYPTION_KEY=$(bashio::config 'encryption_key')
