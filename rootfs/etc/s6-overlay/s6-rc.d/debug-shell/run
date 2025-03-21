@@ -5,8 +5,11 @@
 # Temporary debug shell to keep container alive
 # ==============================================================================
 
+# S’assurer que le script est exécutable dans le conteneur
+chmod +x "$0"
+
 bashio::log.info "Debug shell started. Container will stay alive for interactive debugging."
 bashio::log.info "Use 'docker exec -it <container> bash' to access the shell."
 
-# Garder le conteneur actif avec un shell
-exec /bin/bash -i
+# Garder le conteneur actif sans boucle
+exec tail -f /dev/null

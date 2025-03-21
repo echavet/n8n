@@ -24,8 +24,8 @@ if bashio::config.has_value 'encryption_key'; then
 else
   bashio::log.info "Aucune clé de chiffrement valide spécifiée, attente de génération par n8n..."
   
-  # Attendre que /root/.n8n/config soit créé (timeout de 60 secondes)
-  declare -i timeout=60
+  # Attendre que /root/.n8n/config soit créé (timeout de 120 secondes)
+  declare -i timeout=120
   declare -i count=0
   while [ ! -f /root/.n8n/config ] && [ "${count}" -lt "${timeout}" ]; do
     sleep 1
