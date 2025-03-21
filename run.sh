@@ -1,5 +1,5 @@
 #!/usr/bin/with-contenv bashio
-set -e        # exit on error
+set -e                                                  # exit on error
 
 bashio::log.info "N8N addon starting..."
 
@@ -15,17 +15,18 @@ export N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=true
 export N8N_CONFIG_DIR=/data
 
 # Si une encryption_key est spécifiée, l'utiliser
-if [ -n "$ENCRYPTION_KEY" ]; then
+if [ -n "$ENCRYPTION_KEY" ] && [ "$ENCRYPTION_KEY" != "null" ]
   export N8N_ENCRYPTION_KEY="$ENCRYPTION_KEY"
   bashio::log.info "Utilisation de la clé de chiffrement spécifiée dans les options : $ENCRYPTION_KEY"
-else
-  bashio::log.info"Aucune clé de chiffrement spécifiée dans les options, n8n va la générer."
+else  
+  bashio::log.info "Aucune clé de chiffrement valide spécifiée (vide ou 'null'), n8n va la générer."
 fi
 
 n8n start &
 N8N_PID=$!
 
 # Attendre que /data/config soit créé (timeout de 30 secondes)
+bashio::log.info "waiting for n8n to generate the encryption key..."
 TIMEOUT=60
 COUNT=0
 while [ ! -f /data/config ] && [ $COUNT -lt $TIMEOUT ]; do
@@ -33,9 +34,10 @@ while [ ! -f /data/config ] && [ $COUNT -lt $TIMEOUT ]; do
   COUNT=$((COUNT + 1))
   bashio::log.debug "Attente de la création de /data/config... ($COUNT/$TIMEOUT secondes)"
 done
+bashio::log.debug "done!"
 
 # Vérifier si encryption_key est vide et si le fichier config existe
-if [ -z "$ENCRYPTION_KEY" ]; then
+if [ -z "$ENCRYPTION_KEY" ] || [ "$ENCRYPTION_KEY" = "null" ]
   if [ -f /data/config ]; then
     GENERATED_KEY=$(jq -r '.encryptionKey // empty' /data/config)
     if [ -n "$GENERATED_KEY" ]; then
