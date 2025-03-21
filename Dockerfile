@@ -12,6 +12,7 @@ EXPOSE 5678
 # Répertoire de travail
 WORKDIR /data
 ENV N8N_CONFIG_DIR=/data
+ENV N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=true
 
 COPY run.sh /
 RUN chmod a+x /run.sh
