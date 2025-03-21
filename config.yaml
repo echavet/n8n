@@ -1,5 +1,5 @@
 name: "n8n"
-version: "1.1.1"
+version: "1.1.2"
 slug: "n8n"
 description: "Lance une instance de n8n pour l'automatisation des workflows"
 init: false
@@ -9,9 +9,9 @@ arch:
   - armhf
   - armv7
   - i386
-privileged:
-  - NET_ADMIN  
-  - SYS_ADMIN  
+#privileged:
+#  - NET_ADMIN  
+#  - SYS_ADMIN  
 map:
   - ssh_keys:rw
   - addons:r
@@ -29,7 +29,9 @@ ports_description:
   5678/tcp: "Port pour accéder à l'interface web de n8n"
 options:
   log_level: "info"
+  webhook_url: "http://localhost:5678"  # Valeur par défaut
 schema:
   log_level: "list(debug|info|warn|error)?"
+  webhook_url: str
 map:
   - "config:rw"  # Persistance des données dans /data
