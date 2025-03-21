@@ -1,5 +1,5 @@
 name: "n8n"
-version: "1.2.0"
+version: "1.2.1"
 slug: "n8n"
 description: "Lance une instance de n8n pour l'automatisation des workflows"
 init: false
@@ -9,30 +9,25 @@ arch:
   - armhf
   - armv7
   - i386
-#privileged:
-#  - NET_ADMIN  
-#  - SYS_ADMIN  
-map:
-  - ssh_keys:rw
-  - addons:r
-  - homeassistant_config:rw  
-  - share:rw
-  - ssl:rw
-  
-url: "https://github.com/echavet/n8n"
-startup: "application"
-boot: "auto"
-host_network: true
 ports:
   5678/tcp: 5678
 ports_description:
   5678/tcp: "Port pour accéder à l'interface web de n8n"
-options:
-  log_level: "INFO"
+
+map:
+  - config:rw  
+  
+url: "https://github.com/echavet/n8n"
+startup: "application"
+boot: "auto"
+
+host_network: true
+
+options:  
   webhook_url: "http://localhost:5678"  # Valeur par défaut
+
 schema:
-  log_level: "list(DEBUG|INFO|WARNING|ERROR)?"
   webhook_url: str
   encryption_key: str?
-map:
-  - "config:rw"  # Persistance des données dans /data
+
+log_level: debug

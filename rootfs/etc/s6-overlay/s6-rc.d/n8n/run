@@ -1,0 +1,32 @@
+#!/usr/bin/with-contenv bashio
+# shellcheck shell=bash
+# ==============================================================================
+# Home Assistant Community Add-on: n8n
+# Runs the n8n service
+# ==============================================================================
+
+declare webhook_url
+declare encryption_key
+
+bashio::log.info "Starting n8n service..."
+
+webhook_url=$(bashio::config 'webhook_url')
+encryption_key=$(bashio::config 'encryption_key')
+
+bashio::log.info "webhook_url: ${webhook_url}"
+
+export N8N_HOST=0.0.0.0
+export N8N_PORT=5678
+export N8N_WEBHOOK_URL="${webhook_url}"
+export N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=true
+export N8N_RUNNERS_ENABLED=true
+
+if bashio::config.has_value 'encryption_key'; then
+  export N8N_ENCRYPTION_KEY="${encryption_key}"
+  bashio::log.info "Utilisation de la clé de chiffrement: ${encryption_key}"
+else
+  bashio::log.error "Aucune clé de chiffrement disponible après initialisation!"
+  bashio::exit.nok "n8n nécessite une clé de chiffrement pour démarrer."
+fi
+
+exec n8n start
