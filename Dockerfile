@@ -6,6 +6,9 @@ RUN apk add --no-cache \
     nodejs \
     npm
 
+# Installer n8n globalement
+RUN npm install -g n8n
+
 # Exposition du port
 EXPOSE 5678
 
