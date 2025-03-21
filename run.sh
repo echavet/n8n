@@ -4,6 +4,7 @@
 WEBHOOK_URL=$(bashio::config 'webhook_url')
 ENCRYPTION_KEY=$(bashio::config 'encryption_key')
 
+bashio::log.info "webhook_url  : $WEBHOOK_URL"
 
 export N8N_HOST=0.0.0.0
 export N8N_PORT=5678
@@ -14,9 +15,9 @@ export N8N_CONFIG_DIR=/data
 # Si une encryption_key est spécifiée, l'utiliser
 if [ -n "$ENCRYPTION_KEY" ]; then
   export N8N_ENCRYPTION_KEY="$ENCRYPTION_KEY"
-  bashio::log.debug "Utilisation de la clé de chiffrement spécifiée dans les options : $ENCRYPTION_KEY"
+  bashio::log.info "Utilisation de la clé de chiffrement spécifiée dans les options : $ENCRYPTION_KEY"
 else
-  bashio::log.debug "Aucune clé de chiffrement spécifiée dans les options, n8n va la générer."
+  bashio::log.info"Aucune clé de chiffrement spécifiée dans les options, n8n va la générer."
 fi
 
 n8n start &
