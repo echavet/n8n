@@ -4,7 +4,8 @@ FROM $BUILD_FROM
 # Installation des dépendances
 RUN apk add --no-cache \
     nodejs \
-    npm
+    npm \
+    jq
 
 # Installer n8n globalement
 RUN npm install -g n8n
